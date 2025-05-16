@@ -3,7 +3,7 @@
 // import { NextRequest,NextResponse } from "next/server";
 // import bcryptjs from "bcryptjs";
 
-// connect()
+// await connect()
 
 // export async function POST(request:NextRequest){
 //     try {
@@ -42,6 +42,7 @@
 //     }
 // }
 
+// app/api/users/signup/route.ts
 import { connect } from "@/dbConfig/dbConfig";
 import User from "@/models/userModel";
 import { NextRequest, NextResponse } from "next/server";
@@ -49,30 +50,25 @@ import bcryptjs from "bcryptjs";
 
 export async function POST(request: NextRequest) {
   try {
-    await connect(); // Ensure DB connection is awaited
+    await connect(); // Await DB connection
 
     const reqBody = await request.json();
     let { userName, email, password } = reqBody;
 
-    // Input validation
     if (!userName || !email || !password) {
       return NextResponse.json({ error: "All fields are required" }, { status: 400 });
     }
 
-    // Normalize email
-    email = email.toLowerCase();
+    email = email.toLowerCase(); // Normalize email
 
-    // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return NextResponse.json({ error: "User already exists" }, { status: 400 });
     }
 
-    // Hash password
     const salt = await bcryptjs.genSalt(10);
     const hashedPassword = await bcryptjs.hash(password, salt);
 
-    // Create new user
     const newUser = new User({
       userName,
       email,
@@ -81,22 +77,16 @@ export async function POST(request: NextRequest) {
 
     const savedUser = await newUser.save();
 
-    // Remove sensitive info before sending response
-    const userResponse = {
-      _id: savedUser._id,
-      userName: savedUser.userName,
-      email: savedUser.email,
-    };
-
     return NextResponse.json({
       message: "User created successfully",
       success: true,
-      user: userResponse,
+      user: {
+        id: savedUser._id,
+        email: savedUser.email,
+        userName: savedUser.userName,
+      },
     });
   } catch (error: any) {
-    return NextResponse.json(
-      { error: error.message || "Internal Server Error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: error.message || "Internal Server Error" }, { status: 500 });
   }
 }

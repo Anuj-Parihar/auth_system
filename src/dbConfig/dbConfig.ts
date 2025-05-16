@@ -1,7 +1,7 @@
 import mongoose  from "mongoose";
 export  async function connect(){
     try {
-        mongoose.connect(process.env.MONGODB_URI!); //extrematly(!) sign used in TS beacuse these is not guarantee to correct this URL but we know this is correct.
+        mongoose.connect(process.env.MONGODB_URI !); //extrematly(!) sign used in TS beacuse these is not guarantee to correct this URL but we know this is correct.
         const connection = mongoose.connection;
 
 
