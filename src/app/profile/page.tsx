@@ -16,7 +16,7 @@ export default function UserProfile(){
             await axios.get("/api/users/logout");
             toast.success("Logout successful");
             // Redirect to login page
-            router.push("/login");
+            router.push("/login"); //router. push is used to redirect to another page
         } catch (error:any) {
             console.error("Logout failed", error.message);
             toast.error("Logout failed");
@@ -27,7 +27,6 @@ export default function UserProfile(){
         const res = await axios.get('/api/users/meuser');
         console.log(res.data);
         setData(res.data.data._id);
-        
     }
 
 
