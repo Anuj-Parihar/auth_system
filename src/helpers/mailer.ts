@@ -6,7 +6,7 @@ import brcyptjs from 'bcryptjs';
 export const sendEmail = async ({email, emailType, userId}:any) =>{
     try {
         //create a hased token
-        const hashToken = await brcyptjs.hash(userId.toString(), 10);
+        const hashToken = await brcyptjs.hash(userId.toString(), 10); //may be  userID is in the form if Bson ObjectId, so we need to convert it to string
 
         if(emailType === "VERIFY"){
             await User.findByIdAndUpdate(userId, {verifyToken: hashToken, verifyTokenExpiry: Date.now() + 3600000});
