@@ -1,5 +1,5 @@
-"use client";
 
+"use client";
 import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -21,7 +21,7 @@ export default function SignupPage() {
     try {
       setLoading(true);
       const response = await axios.post("/api/users/signup", user);
-      toast.success("Signup successful");
+      toast.success("Signup successful. Please check your email to verify your account.");
       router.push("/login");
     } catch (error: any) {
       toast.error(error?.response?.data?.error || "Signup failed");
@@ -35,53 +35,80 @@ export default function SignupPage() {
   }, [user]);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <h1 className="mb-5 text-2xl font-bold">
-        {loading ? "Processing..." : "Sign Up"}
-      </h1>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+      <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8 space-y-6 animate-fade-in">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-indigo-700">
+            {loading ? "Processing..." : "Create Account"}
+          </h1>
+          <p className="text-gray-500 mt-2">Join us today</p>
+        </div>
 
-      <label htmlFor="username">Username</label>
-      <input
-        className="p-2 border border-gray-300 rounded-lg mb-4 w-72 focus:outline-none focus:border-gray-600"
-        type="text"
-        id="username"
-        value={user.userName}
-        onChange={(e) => setUser({ ...user, userName: e.target.value })}
-        placeholder="Username"
-      />
+        <div className="space-y-4">
+          <div>
+            <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
+              Username
+            </label>
+            <input
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200"
+              type="text"
+              id="username"
+              value={user.userName}
+              onChange={(e) => setUser({ ...user, userName: e.target.value })}
+              placeholder="Your username"
+            />
+          </div>
 
-      <label htmlFor="email">Email</label>
-      <input
-        className="p-2 border border-gray-300 rounded-lg mb-4 w-72 focus:outline-none focus:border-gray-600"
-        type="email"
-        id="email"
-        value={user.email}
-        onChange={(e) => setUser({ ...user, email: e.target.value })}
-        placeholder="Email"
-      />
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+              Email
+            </label>
+            <input
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200"
+              type="email"
+              id="email"
+              value={user.email}
+              onChange={(e) => setUser({ ...user, email: e.target.value })}
+              placeholder="your@email.com"
+            />
+          </div>
 
-      <label htmlFor="password">Password</label>
-      <input
-        className="p-2 border border-gray-300 rounded-lg mb-4 w-72 focus:outline-none focus:border-gray-600"
-        type="password"
-        id="password"
-        value={user.password}
-        onChange={(e) => setUser({ ...user, password: e.target.value })}
-        placeholder="Password"
-      />
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+              Password
+            </label>
+            <input
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200"
+              type="password"
+              id="password"
+              value={user.password}
+              onChange={(e) => setUser({ ...user, password: e.target.value })}
+              placeholder="••••••••"
+            />
+          </div>
 
-      <button
-        onClick={onSignup}
-        disabled={buttonDisabled}
-        className="p-2 w-72 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600 disabled:opacity-50"
-      >
-        {buttonDisabled ? "Fill all fields" : "Sign Up"}
-      </button>
+          <div className="pt-2">
+            <button
+              onClick={onSignup}
+              disabled={buttonDisabled}
+              className={`w-full py-2 px-4 rounded-lg font-medium text-white transition duration-200 ${
+                buttonDisabled
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-indigo-600 hover:bg-indigo-700"
+              }`}
+            >
+              {loading ? "Creating account..." : "Sign Up"}
+            </button>
+          </div>
+        </div>
 
-      <Link href="/login" className="text-blue-500 hover:underline">
-        Already have an account? Login
-      </Link>
+        <div className="text-center text-sm text-gray-600">
+          Already have an account?{" "}
+          <Link href="/login" className="text-indigo-600 font-medium hover:underline">
+            Login
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }
-
